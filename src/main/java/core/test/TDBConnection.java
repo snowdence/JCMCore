@@ -2,6 +2,7 @@ package core.test;
 
 import core.database.MDBConnector;
 import core.model.CourseModel;
+import core.model.EnrollmentModel;
 import core.model.LessonModel;
 import core.model.UserModel;
 
@@ -123,6 +124,40 @@ public class TDBConnection {
     }
     public void testRemoveCourseModel() {
         CourseModel records = new CourseModel(1);
+        boolean status = records.remove();//remove default by id
+        //boolean status = user.remove("WHERE username='admin1'");//remove default by condition
+        System.out.println(status ? "OK" : "Error");
+    }
+    //endregion
+
+
+    //region testUserModel
+    public void testSelectEnrollmentModel() {
+        EnrollmentModel record = new EnrollmentModel(1);
+        boolean status = record.select();
+        if(status) {
+            System.out.println(record.toString());
+        }
+        else{
+            System.out.println("No exist or error");
+        }
+    }
+    public void testInsertEnrollmentModel() {
+        EnrollmentModel user = new EnrollmentModel(1,1);
+        boolean status = user.insert();
+        System.out.println(status ? "OK" : "Error");
+
+    }
+    public void testUpdateEnrollmentModel() {
+        EnrollmentModel record =new EnrollmentModel(1, 1);
+        record.setID(1);
+        record.setUserID(2);
+        boolean status = record.update(null,null); //update by current id full fields;
+        //boolean status = user.update(null, String.format("WHERE username = '%s'", "admin"));
+        System.out.println(status ? "OK" : "Error");
+    }
+    public void testRemoveEnrollmentModel() {
+        EnrollmentModel records = new EnrollmentModel(1);
         boolean status = records.remove();//remove default by id
         //boolean status = user.remove("WHERE username='admin1'");//remove default by condition
         System.out.println(status ? "OK" : "Error");

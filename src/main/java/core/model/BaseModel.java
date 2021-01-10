@@ -3,6 +3,7 @@ package core.model;
 import core.database.MDBConnector;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public abstract class BaseModel {
     protected int ID = 0;
@@ -12,7 +13,6 @@ public abstract class BaseModel {
     public BaseModel(){
         mdbConnector = MDBConnector.getInstance();
         conn = mdbConnector.getConnection();
-
     }
 
     public int getID() {
@@ -35,7 +35,7 @@ public abstract class BaseModel {
     public abstract boolean select();
 
     public abstract boolean select(String condition);
-
+    public abstract <T> T parseItem(ResultSet rs) throws SQLException;
 
 
     public String getTable() {

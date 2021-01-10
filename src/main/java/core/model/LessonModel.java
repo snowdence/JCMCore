@@ -12,6 +12,9 @@ public class LessonModel extends BaseModel {
     private String DEFAULT_QUERY_INSERT = "INSERT INTO %s (course_id, title, description, content) VALUES ( %d, '%s', '%s' ,'%s') ";
     private String DEFAULT_QUERY_UPDATE = "UPDATE %s SET course_id =%d, title = '%s' , description ='%s', content ='%s' ";
 
+    public LessonModel() {
+        this.table = "lesson";
+    }
     public LessonModel(int id) {
         this.table = "lesson";
         this.setID(id);
@@ -153,13 +156,14 @@ public class LessonModel extends BaseModel {
         return this.select(null);
     }
 
-    public void parseLessonByRS(ResultSet rs) throws SQLException {
+    public LessonModel parseItem(ResultSet rs) throws SQLException {
         do {
             setID(rs.getInt("id"));
             setCourseID(rs.getInt("course_id"));
             setTitle(rs.getString("title"));
             setContent(rs.getString("content"));
             setDescription(rs.getString("description"));
+            return this;
         } while (rs.next());
     }
 
@@ -178,7 +182,7 @@ public class LessonModel extends BaseModel {
             System.out.println(queryString);
             ResultSet rs = stmt.executeQuery(queryString);
             if (rs.next()) {
-                this.parseLessonByRS(rs);
+                this.parseItem(rs);
                 return true;
             } else {
                 return false;

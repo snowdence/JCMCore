@@ -1,6 +1,7 @@
 package core.model;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class CourseModel extends BaseModel {
 
@@ -14,14 +15,17 @@ public class CourseModel extends BaseModel {
     private String DEFAULT_QUERY_INSERT = "INSERT INTO %s (author_id, name, image_path, description, date_created, date_opened) VALUES ( %d, '%s', '%s' ,'%s','%s', '%s') ";
     private String DEFAULT_QUERY_UPDATE = "UPDATE %s SET author_id =%d, name = '%s' , image_path ='%s', description ='%s', date_created ='%s', date_opened ='%s' ";
 
+    public CourseModel(){
+        this.table = "course";
+    }
     public CourseModel(int id) {
         this.table = "course";
         this.setID(id);
         this.select();
     }
-    public CourseModel(int authorID, String name,String imagePath, String description, Timestamp dateCreated, Timestamp dateOpened){
+    public CourseModel( String name,String imagePath, String description, Timestamp dateCreated, Timestamp dateOpened){
         this.table  = "course";
-        this.AuthorID = authorID;
+        //this.AuthorID = authorID;
         this.Name = name;
         this.ImagePath= imagePath;
         this.Description = description;
@@ -182,7 +186,7 @@ public class CourseModel extends BaseModel {
         return this.select(null);
     }
 
-    public void parseLessonByRS(ResultSet rs) throws SQLException {
+    public CourseModel parseItem(ResultSet rs) throws SQLException {
         do {
             setID(rs.getInt("id"));
             setAuthorID(rs.getInt("author_id"));
@@ -191,6 +195,7 @@ public class CourseModel extends BaseModel {
             setDescription(rs.getString("description"));
             setDateCreated(rs.getTimestamp("date_created"));
             setDateOpened(rs.getTimestamp("date_opened"));
+            return this;
         } while (rs.next());
     }
 
@@ -209,7 +214,7 @@ public class CourseModel extends BaseModel {
             System.out.println(queryString);
             ResultSet rs = stmt.executeQuery(queryString);
             if (rs.next()) {
-                this.parseLessonByRS(rs);
+                this.parseItem(rs);
                 return true;
             } else {
                 return false;
@@ -220,6 +225,8 @@ public class CourseModel extends BaseModel {
             return false;
         }
     }
+
+
 
     @Override
     public String toString() {

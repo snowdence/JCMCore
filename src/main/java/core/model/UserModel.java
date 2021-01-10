@@ -1,6 +1,7 @@
 package core.model;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class UserModel extends BaseModel {
 
@@ -13,11 +14,15 @@ public class UserModel extends BaseModel {
     private String DEFAULT_QUERY_INSERT = "INSERT INTO %s (username, password, full_name, avatar_path, role) VALUES ( '%s', '%s', '%s' ,'%s' ,%d) ";
     private String DEFAULT_QUERY_UPDATE = "UPDATE %s SET username ='%s', password = '%s' , full_name ='%s', avatar_path ='%s', role =%d ";
 
+
     public UserModel(int id) {
         this.table = "user";
 
         this.setID(id);
         this.select();
+    }
+    public UserModel(){
+        this.table = "user";
     }
 
     public UserModel(String username, String password, String fullName, String avatarPath, int role) {
@@ -167,7 +172,7 @@ public class UserModel extends BaseModel {
         return this.select(null);
     }
 
-    public void parseUserByRS(ResultSet rs) throws SQLException {
+    public UserModel parseItem(ResultSet rs) throws SQLException {
         do {
             setID(rs.getInt("id"));
             setUsername(rs.getString("username"));
@@ -175,7 +180,9 @@ public class UserModel extends BaseModel {
             setFullName(rs.getString("full_name"));
             setAvatarPath(rs.getString("avatar_path"));
             setRole(rs.getInt("role"));
+            return this;
         } while (rs.next());
+
     }
 
     @Override
@@ -193,7 +200,7 @@ public class UserModel extends BaseModel {
             System.out.println(queryString);
             ResultSet rs = stmt.executeQuery(queryString);
             if (rs.next()) {
-                this.parseUserByRS(rs);
+                this.parseItem(rs);
                 return true;
             } else {
                 return false;
@@ -205,9 +212,11 @@ public class UserModel extends BaseModel {
         }
     }
 
+
+
     public boolean selectByUserName() {
         String queryString = String.format("SELECT * FROM %s ", getTable());
-        queryString += String.format("WHERE username = %d", getUsername());
+        queryString += String.format("WHERE username = '%s'", getUsername());
 
         Statement stmt = null;
         try {
@@ -215,7 +224,7 @@ public class UserModel extends BaseModel {
             System.out.println(queryString);
             ResultSet rs = stmt.executeQuery(queryString);
             if (rs.next()) {
-                this.parseUserByRS(rs);
+                this.parseItem(rs);
                 return true;
             } else {
                 return false;

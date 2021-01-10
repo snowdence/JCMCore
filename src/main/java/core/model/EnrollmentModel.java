@@ -175,6 +175,10 @@ public class EnrollmentModel extends BaseModel {
         CourseModel record = new CourseModel(this.getCourseID());
         return record;
     }
+    public UserModel getUserRelation(){
+        UserModel record = new UserModel(this.getUserID());
+        return record;
+    }
     @Override
     public String toString() {
         return String.format("ID: %s\n" +

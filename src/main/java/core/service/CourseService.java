@@ -137,8 +137,6 @@ public class CourseService {
      * @return
      */
     public ArrayList<CourseModel> getEnrolledCourse(AccountEntity account) {
-
-
         ArrayList<CourseModel> listCourse = new ArrayList<CourseModel>();
         MDBConnector mdbConnector = MDBConnector.getInstance();
         Connection conn = mdbConnector.getConnection();
@@ -176,6 +174,44 @@ public class CourseService {
         }
         return listCourse;
     }
+
+    /**
+     * Lay toan bo hoc sinh cua 1 khoa hoc
+     * @param course
+     * @return
+     */
+
+    public ArrayList<UserModel> getAllParticipants(CourseModel course){
+        ArrayList<UserModel> listUserModel = new ArrayList<UserModel>();
+        MDBConnector mdbConnector = MDBConnector.getInstance();
+        Connection conn = mdbConnector.getConnection();
+
+
+        ArrayList<EnrollmentModel> list = new ArrayList<EnrollmentModel>();
+
+        String queryString = String.format("SELECT * FROM enrollment WHERE course_id = %d", course.getID());
+
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            System.out.println(queryString);
+            ResultSet rs = stmt.executeQuery(queryString);
+            if (rs.next()) {
+                do {
+                    EnrollmentModel model = new EnrollmentModel();
+                    model.parseItem(rs);
+                    listUserModel.add(model.getUserRelation());
+                    list.add(model);
+                }
+                while (rs.next());
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            System.out.println("[DBHandleException]: Có lỗi xảy ra DB select()");
+        }
+        return listUserModel;
+    }
+
 
 
 }

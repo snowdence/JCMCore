@@ -2,6 +2,7 @@ package core.test;
 
 import core.entity.AccountEntity;
 import core.model.CourseModel;
+import core.model.UserModel;
 import core.service.CourseService;
 
 import java.lang.reflect.Array;
@@ -71,8 +72,8 @@ public class CoreTest {
         AccountEntity account = new AccountEntity();
         int loginState= account.login("hocsinh", "admin");
         if(loginState == 0) {
-            ArrayList<CourseModel> mycourses = course.getEnrolledCourse(account);
-            for (CourseModel ct : mycourses) {
+            ArrayList<UserModel> mycourses = course.getAllParticipants(new CourseModel(3));
+            for (UserModel ct : mycourses) {
                 System.out.println(ct);
             }
         }

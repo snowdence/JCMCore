@@ -34,6 +34,10 @@ public abstract class BaseModel {
 
     public abstract boolean select();
 
+    public abstract boolean select(String condition);
+
+
+
     public String getTable() {
         return table;
     }
